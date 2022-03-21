@@ -1,3 +1,4 @@
+from collections import namedtuple
 from dataclasses import dataclass
 from typing import NamedTuple
 
@@ -5,6 +6,11 @@ from typing import NamedTuple
 class Name:
     first_name: str
     surname: str
+    
+
+class Money(NamedTuple):
+    currency: str
+    value: int
 
 class Person:
 
@@ -59,3 +65,26 @@ def test_batch_is_same():
     assert batch_first == batch_third
     
 test_batch_is_same()
+
+
+def test_value_object_match():
+    Line = namedtuple('Line', ['sku', 'qty'])
+    assert Money('gbp', 10) == Money('gbp', 10)
+    assert Name('Harry', 'Percival') != Name('Bob', 'Gregory')
+    assert Line('RED-CHAIR', 5) == Line('RED-CHAIR', 5)
+
+test_value_object_match()
+
+
+def test_barry_is_harry():
+    harry = Person(Name("Harry", "Percival"))
+    barry = harry
+
+    barry.name = Name("Barry", "Percival")
+
+    assert harry is barry and barry is harry
+    print(barry)
+    print(harry)
+    
+
+test_barry_is_harry()
